@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset='UTF-8'>
+    <title>Web Chat</title>
+    <meta name="robots" content="noindex">
+    <link rel="shortcut icon" href="https://cdn.dribbble.com/users/6409791/screenshots/16069228/media/d1748e8da94de43d92219eaee258edee.jpg?compress=1&resize=400x300" />
+
+    <link rel="mask-icon" type=""
+          href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg"
+          color="#111"/>
+    <link rel="canonical" href="https://codepen.io/emilcarlsson/pen/ZOQZaV?limit=all&page=74&q=contact+"/>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet'
+          type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <!--    libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="/css/phonebook.css">
+    <script>try {
+        Typekit.load({async: true});
+    } catch (e) {
+    }</script>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+    <link rel='stylesheet prefetch'
+          href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+    <!--------------------------------------------------------------------------------------->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+    <style class="cp-pen-styles">
+    </style>
+    <style>
+        a {
+            color: white;
+            text-decoration-line: none;
+        }
+        a:hover{
+            color: white;
+            text-decoration-line: none;
+        }
+        p {
+            margin-bottom: -4px;
+        }
+    </style>
+</head>
+<body>
+<div id="frame">
+    <div id="sidepanel">
+        <div id="profile">
+            <div class="wrap">
+                <img id="profile-img" style="  object-fit: cover;"
+                     th:src="@{${'/image/display/'+ userInfo.getUserId()}}"
+                     class="online" alt=""/>
+                <p th:text="${userInfo.getUserName()}"></p>
+                <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+                <div id="expanded">
+                    <label><i class="fa fa-google fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" th:value="${userInfo.getUserEmail()}" readonly/>
+                    <input id="userId" name="twitter" type="text" th:value="${userInfo.getUserId()}" readonly hidden/>
+                    <label><i class="fa fa-user fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" th:value="${userInfo.getUserName()}" readonly/>
+                    <label><i class="fa fa-phone fa-fw" aria-hidden="true"></i></label>
+                    <input name="twitter" type="text" th:value="${userInfo.getUserContactNumber()}" readonly/>
+                </div>
+            </div>
+        </div>
+        <div id="search">
+            <label><i class="fa fa-search" aria-hidden="true"></i></label>
+            <input type="text" placeholder="Tìm kiếm bạn bè..."/>
+        </div>
+        <div id="contacts">
+            <ul>
+                <th:block th:each="row,rowStat : ${listFriendOnlineDTO}">
+
+                    <li class="contact active">
+                        <div class="wrap">
+                            <div th:if="${row.getFriendReceiverId().getOnline()} eq '1'">
+                                <span class="contact-status online"></span>
+                            </div>
+
+                            <div th:if="${row.getFriendReceiverId().getOnline()} eq '0'">
+                                <span class="contact-status offline"></span>
+                            </div>
+                            <a th:href="@{'/box-chat/'+${row.getFriendReceiverId().getUserId()}}">
+                                <img class="img"
+                                     th:src="@{${'/image/display/' + row.getFriendReceiverId().getUserId()}}"
+                                     alt=""/>
+                                <div class="meta">
+                                    <p th:text="${row.getFriendReceiverId().getUserName()}" class="name"></p>
+                                    <p th:if="${row.getFriendReceiverId().getOnline()} eq '1'">Online</p>
+                                    <p th:if="${row.getFriendReceiverId().getOnline()} eq '0'">Offline</p>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+        <div id="bottom-bar">
+            <a th:href="@{/user/profile}">
+                <button id="user-profile"><i class="fa fa-user" aria-hidden="true"></i> <span>
+                 Thông tin
+            </span></button>
+            </a>
+            <a th:href="@{/box-chat}">
+                <button id="user-profile2"><i class="fa fa-users" aria-hidden="true"></i> <span>
+                 Nhắn tin
+            </span></button>
+            </a>
+
+            <a th:href="@{/friend/search-friend}">
+                <button id="settings2"><i class="fa fa-search" aria-hidden="true"></i> <span>
+                  Tìm kiếm bạn
+            </span></button></a>
+
+            <a th:href="@{/friend/list-request}">
+                <button><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>
+                  Lời mời kết bạn
+            </span></button></a>
+
+            <a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">
+                <button id="settings1"><i class="fa fa-sign-out" aria-hidden="true"></i> <span>
+                  Đăng xuất
+            </span></button></a>
+        </div>
+    </div>
+</div>
+<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script>
+
+
+    $("#profile-img").click(function () {
+        $("#status-options").toggleClass("active");
+    });
+
+    $(".expand-button").click(function () {
+        $("#profile").toggleClass("expanded");
+        $("#contacts").toggleClass("expanded");
+    });
+
+    $("#status-options ul li").click(function () {
+        $("#profile-img").removeClass();
+        $("#status-online").removeClass("active");
+        $("#status-away").removeClass("active");
+        $("#status-busy").removeClass("active");
+        $("#status-offline").removeClass("active");
+        $(this).addClass("active");
+
+        if ($("#status-online").hasClass("active")) {
+            $("#profile-img").addClass("online");
+        } else if ($("#status-away").hasClass("active")) {
+            $("#profile-img").addClass("away");
+        } else if ($("#status-busy").hasClass("active")) {
+            $("#profile-img").addClass("busy");
+        } else if ($("#status-offline").hasClass("active")) {
+            $("#profile-img").addClass("offline");
+        } else {
+            $("#profile-img").removeClass();
+        }
+        ;
+
+        $("#status-options").removeClass("active");
+    });
+</script>
+
+</body>
+
+</html>
