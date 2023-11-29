@@ -12,41 +12,43 @@
     <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js}"></script>
 </head>
 <body>
-<h2>Đăng nhập / Đăng ký</h2>
-
 
 <div class="container" id="container">
     <div class="form-container sign-in-container">
         <form name='f' th:action="@{/j_spring_security_check}" method='POST'>
-            <h1>Đăng nhập</h1>
+            <h1>Sign In</h1>
             <div class="social-container">
                 <a href="#" class="social"><i class="fa fa-facebook"></i></a>
                 <a href="#" class="social"><i class="fa fa-google-plus"></i></a>
+                <a href="#" class="social"><i class="fa fa-github"></i></a>
+                <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
             </div>
-            <span>Sử dụng tài khoản của bạn</span>
-            <input type='text' name='username' value='' placeholder="Tài khoản">
-            <input type='password' name='password' placeholder="Mật khẩu"/>
+            <span>or use your email password</span>
+            <input type='text' name='username' value='' placeholder="Username">
+            <input type='password' name='password' placeholder="Password"/>
             <div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
-                <span>Lưu tài khoản của bạn: </span>
+                <span>Save your account: </span>
                 <input style="width: 20px" type="checkbox" name="remember-me"/>
             </div>
 
-            <input class="submit" name="submit" type="submit" value="Đăng nhập"/>
+            <input class="submit" name="submit" type="submit" value="SIGN IN"/>
         </form>
     </div>
 
 
     <div class="form-container sign-up-container">
         <form th:action="@{/sign-up}" method='POST'>
-            <h1>Tạo tài khoản</h1>
+            <h1>Create Account</h1>
             <div class="social-container">
                 <a href="#" class="social"><i class="fa fa-facebook"></i></a>
                 <a href="#" class="social"><i class="fa fa-google-plus"></i></a>
+                <a href="#" class="social"><i class="fa fa-github"></i></a>
+                <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
             </div>
-            <span>Hoặc sử dùng tài khoản để đăng ký.</span>
-            <input id="user-account" type="text" name="user-account" placeholder="Tài khoản"/>
-            <input id="password" type="password" name="password" placeholder="Mật khẩu"/>
-            <input id="re-password" type="password" name="re-password" placeholder="Nhập Lại Mật khẩu"/>
+            <span>or use your email for registration</span>
+            <input id="user-account" type="text" name="user-account" placeholder="Username"/>
+            <input id="password" type="password" name="password" placeholder="Password"/>
+            <input id="re-password" type="password" name="re-password" placeholder="Retype Password"/>
             <input class="submit" name="submit" type="submit" value="Đăng ký" onclick="return validate()"/>
         </form>
     </div>
@@ -55,14 +57,14 @@
     <div class="overlay-container">
         <div class="overlay">
             <div class="overlay-panel overlay-left">
-                <h1>Mừng bạn trở lại</h1>
-                <p>Để giữ kết nối với chúng tôi, vui lòng đăng nhập bằng thông tin cá nhân của bạn</p>
-                <button class="ghost" id="signIn">Đăng nhập</button>
+                <h1>Welcome Back!</h1>
+                <p>Enter your personal details to use all site features</p>
+                <button class="ghost" id="signIn">SIGN IN</button>
             </div>
             <div class="overlay-panel overlay-right">
-                <h1>Chào bạn!</h1>
-                <p>Hãy nhập đầy đủ thông tin cá nhân của bạn khi sử dụng.</p>
-                <button class="ghost" id="signUp">Đăng Ký</button>
+                <h1>Hello, Friend!</h1>
+                <p>Register with your personal details to use all site features</p>
+                <button class="ghost" id="signUp">SIGN UP</button>
             </div>
         </div>
     </div>
