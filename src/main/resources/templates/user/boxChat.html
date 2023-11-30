@@ -71,14 +71,14 @@
     <div id="sidepanel">
         <div id="profile">
             <div class="wrap">
-                <img id="profile-img" style="  object-fit: cover;"
+                <img id="profile-img" style="object-fit: cover; width: 90px; height: 90px;"
                      th:src="@{${'/image/display/'+ userInfo.getUserId()}}"
-                     class="online" alt=""/>
+                     class="rounded-circle online" alt=""/>
                 <p th:text="${userInfo.getUserName()}"></p>
                 <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
 
                 <div id="expanded">
-                    <label><i class="fa fa-google fa-fw" aria-hidden="true"></i></label>
+                    <label><i class="fa fa-google fa-fw" aria-hidden="true" style="color: #ccc;"></i></label>
                     <input name="twitter" type="text" th:value="${userInfo.getUserEmail()}" readonly/>
                     <input id="userId" name="twitter" type="text" th:value="${userInfo.getUserId()}" readonly hidden/>
                     <label><i class="fa fa-user fa-fw" aria-hidden="true"></i></label>
@@ -88,13 +88,15 @@
                 </div>
             </div>
         </div>
-        <div id="search">
+
+        <div id="search" >
             <label><i class="fa fa-search" aria-hidden="true"></i></label>
-            <input type="text" placeholder="Tìm kiếm bạn bè..."/>
+            <input type="text" placeholder="Search friends..."/>
         </div>
+
         <div id="contacts">
             <ul>
-                <p>Bạn bè</p>
+                <p style="padding-left: 10px;">Friends</p>
                 <th:block th:each="row,rowStat : ${friendList}">
                     <!--Dùng để hiển thị contact cho đúng-->
                     <li class="contact active">
@@ -124,7 +126,7 @@
                 </th:block>
             </ul>
             <ul>
-                <p>Group chat</p>
+                <p style="padding-left: 10px;">Group chat</p>
                 <th:block th:each="row,rowStat : ${groupChatDetailList}">
 
                     <li class="contact active">
@@ -170,14 +172,13 @@
                   Lời mời kết bạn
             </span></button>
             </a>
-
-            <button type="button" data-toggle="modal" data-target="#createGroupChat"><i class="fa fa-plus-circle"
-                                                                                        aria-hidden="true"></i>
-                <span>
+            <a>
+                <button type="button" data-toggle="modal" data-target="#createGroupChat"><i class="fa fa-plus-circle"
+                                                                                            aria-hidden="true"></i>
+                    <span>
                   Tạo nhóm chat mới
             </span></button>
-
-
+            </a>
             <a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">
                 <button id="settings1"><i class="fa fa-sign-out" aria-hidden="true"></i> <span>
                   Đăng xuất
@@ -194,10 +195,16 @@
                 <input id="selectedUser" th:value="${friendInfo.getUserId()}" readonly hidden>
                 <div class="social-media">
                     <a th:target="_blank" style="color: unset" th:href="@{${friendInfo.getFacebook()}}">
-                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                    </a>
+                    <a th:target="_blank" style="color: unset" th:href="@{${friendInfo.getFacebook()}}">
+                        <i class="fa fa-video-camera" aria-hidden="true"></i>
+                    </a>
+                    <a th:target="_blank" style="color: unset; border-right: #222222;" th:href="@{${friendInfo.getFacebook()}}">
+                        <i class="fa fa-search" aria-hidden="true"></i>
                     </a>
                     <a th:target="_blank" style="color: unset" th:href="@{${'/user/profile/'+friendInfo.getUserId()}}">
-                        <i class="fa fa-info" aria-hidden="true"></i>
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
                     </a>
 
                 </div>

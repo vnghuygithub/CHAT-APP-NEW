@@ -87,7 +87,7 @@ public class MainController {
             String encryptedPassword = EncryptedPasswordUtils.encryptedPassword(password);
             user.setUserPassword(encryptedPassword);
             user.setEnabled(true);
-            byte[] user_logo = Files.readAllBytes(Paths.get("C:\\Users\\HUY\\Desktop\\Resume\\style.jpg"));
+            byte[] user_logo = Files.readAllBytes(Paths.get("C:\\Users\\HUY\\Desktop\\Resume\\ava.jpg"));
             user.setUserLogo(user_logo);
             userService.save(user);
             Role role = roleService.findById(2L);
